@@ -1,21 +1,31 @@
-FROM node:23
+# Stage 1: fazer build da aplicação
+FROM node:23-slim as builder
 
-# Definir pasta padrão para a aplicação no container
+# Define pasta de trabalho onde ficarão os arquivos
 WORKDIR /app
 
 # Tira proveito do sistema incremental
 # Baixa dependências
-COPY ./package*.json ./
+COPY package*.json ./
 RUN npm install
 
-# Copia arquivos locais para o WORKDIR
-COPY ./ ./
+# Copia o restante do projeto
+COPY . .
 
-# Configuração por variável de ambiente
-ENV URL_BACK="http://localhost:5500/tarefas"
+# Variável de ambiente para o back-end 
+ENV URL_BACK_END="http://localhost:5500/tarefas"
 
-# Expõe porta para acesso da aplicação
-EXPOSE 3000
+# Cria os arquivos estáticos otimizados 
+RUN npm run build
 
-# Comando executado ao iniciar container (inicia a aplicação)
-CMD ["npm", "start"]
+# Stage 2: Usar NGINX para gerenciar o front-end
+FROM nginx:1.27.4
+
+# Copia o build do React para a pasta que o NGINX serve
+COPY --from=builder /app/build /usr/share/nginx/html
+
+# Expõe a porta para acesso
+EXPOSE 80
+
+# Inicia o nginx ao inicializar o container
+CMD ["nginx", "-g", "daemon off;"]
