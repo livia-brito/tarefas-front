@@ -1,70 +1,37 @@
-# Getting Started with Create React App
+# Microsserviço: Tarefas Front-end
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Projeto feito para a disciplina de T.E.S.I. (Desenvolvimento de Sistemas de Informação), ministrada  pelo professor Bruno Catão.
 
-## Available Scripts
+Este front-end utiliza um Dockerfile com duas etapas (Stages):
+- Build do projeto React
+- Serviço estático via NGINX 
 
-In the project directory, you can run:
+## Como utilizar
 
-### `npm start`
+### 1. `docker build -t tarefas-front .`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Realiza a criação da imagem docker com o nome especificado.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+*O titulo definido por `-t tarefas-front` não é obrigatório, se for utiliza-lo deve substituir `tarefas-front` pelo nome desejado, em que tarefas-front é um nome sugerido.*
 
-### `npm test`
+### 2. `docker run -p {porta_local}:80 {nome_da_imagem}`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Inicia o container, partindo da imagem docker com nome especificado. Deve-se substituir `{nome_da_imagem}` pelo nome do container que foi definido no passo 1.
 
-### `npm run build`
+É possível utilizar as flags `-p` para mapear a aplicação para uma porta específica na sua máquina, a aplicação dentro do container sempre expõe a porta 80, então isso é padrão. Porém, deve-se substituir `{porta_local}` pela porta desejada para permitir o acesso através desta porta em específico.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Exemplo: `docker run -p 3000:80 tarefas-front`\
+Nesse exemplo a aplicação estará acessível em: `http://localhost:3000`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Informações importantes
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Devido ao React, ao realizar o build, receber os valores das variáveis de ambiente, e deixar de maneira estática no arquivo HTML gerado, não é possível utilizar a flag `-e` para alterar a URL do Back-end.
 
-### `npm run eject`
+Para alterar a URL do Back-end é necessário alterar o Dockerfile.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+`URL_BACK_END` é uma variável de ambiente que tem como valor padrão: `http://localhost:5500/tarefas`
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Imagem no Docker HUB
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Essa imagem está disponível em: [liviabrito/tarefas-front-end](https://hub.docker.com/r/liviabrito/tarefas-back-end).
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
