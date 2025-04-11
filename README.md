@@ -33,5 +33,5 @@ Para alterar a URL do Back-end é necessário alterar o Dockerfile.
 
 ## Imagem no Docker HUB
 
-Essa imagem está disponível em: [liviabrito/tarefas-front-end](https://hub.docker.com/r/liviabrito/tarefas-back-end).
+Essa imagem está disponível em: [liviabrito/tarefas-front-end](https://hub.docker.com/r/liviabrito/tarefas-front-end).
 
